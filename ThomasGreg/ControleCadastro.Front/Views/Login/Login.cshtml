@@ -1,0 +1,93 @@
+﻿@{
+    Layout = "_LayoutLogin"; // Desabilitar o layout para essa página
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Controle de Cadastro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4>Login</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="senha" class="form-label">Senha</label>
+                                <input type="password" id="senha" name="senha" class="form-control" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                        </form>
+                        <div class="mt-3 text-center">
+                            <a a href="@Url.Action("Cadastro", "Login")" class="btn btn-link">Não tem uma conta? Cadastre-se aqui</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="toast-header">
+                <strong class="me-auto">Mensagem</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        function showToast(message, isSuccess) {
+            var toastMessage = document.getElementById("toastMessage");
+
+            var decodedMessage = decodeHtml(message);
+
+            toastMessage.textContent = decodedMessage;
+
+            var toast = document.getElementById('toastNotification');
+            if (isSuccess) {
+                toast.classList.remove("bg-danger");
+                toast.classList.add("bg-success"); // Cor verde para sucesso
+            } else {
+                toast.classList.remove("bg-success");
+                toast.classList.add("bg-danger"); // Cor vermelha para erro
+            }
+
+            var bootstrapToast = new bootstrap.Toast(toast);
+            bootstrapToast.show(); // Exibe o toast
+        }
+
+        function decodeHtml(html) {
+            var txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        // Verifica se existe uma mensagem de sucesso ou erro e exibe a mensagem
+        @if (TempData["Message"] != null)
+        {
+            <text>
+                            var isSuccess = '@TempData["Codigo"]' == '200'; // Checa se o código é 200 (sucesso)
+                            showToast('@TempData["Message"]', isSuccess);
+            </text>
+        }
+    </script>
+</body>
+</html>

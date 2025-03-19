@@ -1,0 +1,78 @@
+﻿@model Cliente
+
+@{
+    var firstName = Model.Nome?.Split(" ").FirstOrDefault() ?? "Cliente";
+    ViewData["Title"] = firstName;
+}
+
+<h3 class="text-center">@ViewData["Title"]</h3>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="main-content w-100">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Exibindo a imagem do cliente -->
+                <div class="row mb-4">
+                    <div class="col-md-12 text-center">
+                        <h3>Imagem de Perfil</h3>
+                        <div class="text-center">
+                            @if (Model.Logotipo != null && Model.Logotipo.Length > 0)
+                            {
+                                // Convertendo o array de bytes em Base64 para exibição da imagem
+                                var base64String = Convert.ToBase64String(Model.Logotipo);
+                                var imageUrl = "data:image/jpeg;base64," + base64String;
+
+                                <img id="clientImage"
+                                     src="@imageUrl"
+                                     alt="Imagem de Perfil"
+                                     class="img-fluid rounded-circle"
+                                     style="width: 150px; height: 150px;">
+                            }
+                            else
+                            {
+                                <img id="clientImage"
+                                     src="@Url.Content("~/icon/user.png")"
+                                     alt="Imagem de Perfil"
+                                     class="img-fluid rounded-circle"
+                                     style="width: 150px; height: 150px;">
+                            }
+                        </div>
+                        <!-- Formulário de alteração de imagem -->
+                        <form asp-action="AtualizarImagem" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="imagem" class="form-label">Escolha uma nova imagem</label>
+                                <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Salvar Imagem</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Formulário de alteração de senha -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Alterar Senha</h3>
+                        <form asp-action="AtualizarSenha" method="post">
+                            <div class="mb-3">
+                                <label for="novaSenha" class="form-label">Nova Senha</label>
+                                <input type="password" class="form-control" id="novaSenha" name="novaSenha" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmarSenha" class="form-label">Confirmar Nova Senha</label>
+                                <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Atualizar Senha</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

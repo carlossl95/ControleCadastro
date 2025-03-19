@@ -1,0 +1,10 @@
+﻿namespace ControleCadastro.Front.Models
+{
+    public class Autorization
+    {
+        public int Id { get; private set; }
+        public string ClientId { get; private set; }
+        public string ClientSecret { get; private set; }
+        public bool IsAdmin { get; private set; }
+    }
+}

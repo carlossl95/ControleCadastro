@@ -1,0 +1,63 @@
+﻿@model List<Endereco>
+
+@{
+    ViewData["Title"] = "Lista de Endereços";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Logradouro</th>
+                <th>Número</th>
+                <th>CEP</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Principal</th>
+                <th>Ações</th> 
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var endereco in Model)
+            {
+                <tr>
+                    <td>@endereco.Id</td>
+                    <td>@endereco.Logadouro</td>
+                    <td>@endereco.Numero</td>
+                    <td>@endereco.Cep</td>
+                    <td>@endereco.Cidade</td>
+                    <td>@endereco.Estado</td>
+                    <td>@(endereco.IsPrincipal ? "Sim" : "Não")</td>
+                    <td>
+                        <!-- Botão de Editar -->
+                        <a href="@Url.Action("Edit", "Endereco", new { id = endereco.Id })" class="btn btn-primary" style="transform: scale(0.95);">Editar</a>
+
+                        <!-- Botão de Excluir -->
+                        <form action="@Url.Action("Delete", "Endereco", new { id = endereco.Id })" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este endereço?')" style="transform: scale(0.95);">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nenhum endereço encontrado.</p>
+}
+
+
+<div class="row mt-3">
+    <div class="d-flex justify-content-between mt-3">
+        <!-- Botão de Atualizar -->
+        <a href="@Url.Action("Index", "Endereco")" class="btn btn-warning" style="transform: scale(0.95);">Atualizar Lista</a>
+
+        <!-- Botão de Adicionar -->
+        <a href="@Url.Action("Inserir", "Endereco")" class="btn btn-success" style="transform: scale(0.95);">Adicionar</a>
+    </div>
+</div>

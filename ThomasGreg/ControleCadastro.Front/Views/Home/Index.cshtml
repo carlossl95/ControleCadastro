@@ -1,0 +1,34 @@
+﻿@model Cliente
+
+@{
+    var firstName = Model.Nome?.Split(" ").FirstOrDefault() ?? "Cliente";
+    ViewData["Title"] = firstName;
+}
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2>Seja Bem-vindo, @firstName!</h2>
+                </div>
+                <div class="card-body text-center">
+                    <p class="lead">Você está autenticado e pronto para usar a aplicação!</p>
+                    <p><strong>Explore as funcionalidades disponíveis.</strong></p>
+                    <a href="@Url.Action("Index", "Endereco")" class="btn btn-success btn-lg mt-3">Ir para Lista de Endereço</a>
+                </div>
+                <div class="card-footer text-center text-muted">
+                    <p>Aplicação Exemplo - 2025</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

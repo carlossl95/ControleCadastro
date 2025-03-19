@@ -1,0 +1,40 @@
+﻿using ControleCadastro.Domain.Entities;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ControleCadastro.Application.DTOs.ClienteDTO
+{
+    public class ClienteDTOInsert
+    {
+        [Column("AutorizationId")]
+        public int AutorizationId { get; set; }
+
+        [Required(ErrorMessage = "{\"Codigo\":400,\"Mensagem\":\"O campo Nome é obrigatório.\"}")]
+        [StringLength(255, ErrorMessage = "{\"Codigo\":400,\"Mensagem\":\"O campo Nome deve ter no máximo 255 caracteres.\"}")]
+        [Column("Nome")]
+        public string Nome { get; set; }
+
+        [Required(ErrorMessage = "{\"Codigo\":400,\"Mensagem\":\"O campo Email é obrigatório.\"}")]
+        [EmailAddress(ErrorMessage = "{\"Codigo\":400,\"Mensagem\":\"O campo Email deve ser um endereço de e-mail válido.\"}")]
+        [StringLength(255, ErrorMessage = "{\"Codigo\":400,\"Mensagem\":\"O campo Email deve ter no máximo 255 caracteres.\"}")]
+        [Column("Email")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "{\"Codigo\":400,\"Mensagem\":\"O campo Senha é obrigatório.\"}")]
+        [StringLength(255, ErrorMessage = "{\"Codigo\":400,\"Mensagem\":\"O campo Email deve ter no máximo 255 caracteres.\"}")]
+        [Column("SenhaHash")]
+        public string SenhaHash { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [Column("Logotipo")]
+        public byte[]? Logotipo { get; set; }
+
+
+    }
+}

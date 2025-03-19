@@ -1,0 +1,60 @@
+﻿@model Endereco
+
+@{
+    ViewData["Title"] = "Editar Endereço";
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" method="post">
+
+    <div class="form-group">
+        <label for="Logadouro">Logradouro</label>
+        <input type="text" class="form-control" id="Logadouro" name="Logadouro" value="@Model.Logadouro" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Numero">Número</label>
+        <input type="text" class="form-control" id="Numero" name="Numero" value="@Model.Numero" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Cep">CEP</label>
+        <input type="text" class="form-control" id="Cep" name="Cep" value="@Model.Cep" required maxlength="10"/>
+    </div>
+
+    <div class="form-group">
+        <label for="Complemento">Complemento</label>
+        <input type="text" class="form-control" id="Complemento" name="Complemento" value="@Model.Complemento" />
+    </div>
+
+    <div class="form-group">
+        <label for="Cidade">Cidade</label>
+        <input type="text" class="form-control" id="Cidade" name="Cidade" value="@Model.Cidade" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Estado">Estado</label>
+        <input type="text" class="form-control" id="Estado" name="Estado" value="@Model.Estado" required />
+    </div>
+
+    <div class="form-group">
+        <label for="IsPrincipal">Principal</label>
+        <select class="form-control" id="IsPrincipal" name="IsPrincipal">
+            <option value="true" selected="@(Model.IsPrincipal)">Sim</option>
+            <option value="false" selected="@(Model.IsPrincipal)">Não</option>
+        </select>
+    </div>
+    <br>
+
+    <button type="submit" class="btn btn-success">Salvar</button>
+    <a href="@Url.Action("Index", "Endereco")" class="btn btn-secondary">Cancelar</a>
+</form>

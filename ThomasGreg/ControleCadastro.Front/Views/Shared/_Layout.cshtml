@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Controle de Cadastro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ControleCadastro.Front.styles.css" asp-append-version="true" />
+    <style>
+        /* Melhorar o visual do navbar */
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+
+            .navbar-brand:hover, .navbar-nav .nav-link:hover {
+                color: #ff9900;
+            }
+
+        .footer {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+        }
+
+            .footer a {
+                color: #ff9900;
+            }
+
+                .footer a:hover {
+                    color: #fff;
+                }
+
+        /* Estilos adicionais */
+        .container {
+            max-width: 960px;
+            margin-top: 30px;
+        }
+
+        .main-content {
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        /* Estilos para o dropdown de usuário */
+        .navbar-user {
+            position: relative;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 10px; /* Ajusta o menu para alinhar à direita do ícone */
+            top: 30px; /* Ajusta o menu para ficar abaixo do ícone */
+            background-color: #fff;
+            box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1); /* Sombras para dar destaque ao menu */
+            z-index: 1000; /* Garante que o menu fique acima de outros elementos */
+            border-radius: 8px;
+            min-width: 150px; /* Largura mínima do menu */
+        }
+
+        /* Tornar o menu visível ao passar o mouse */
+        .navbar-user:hover .user-dropdown {
+            display: flow;
+        }
+
+        /* Adicionar estilo aos itens do menu */
+        .user-dropdown a {
+            color: #343a40;
+            padding: 10px 20px;
+            display: block;
+            text-decoration: none;
+        }
+
+            .user-dropdown a:hover {
+                background-color: #f1f1f1;
+            }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Endereco" asp-action="Index">Endereços</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-lg-flex justify-content-between">
+                    <!-- Menu de navegação -->
+                </div>
+
+                <!-- Ícone de usuário e dropdown -->
+                <div class="navbar-user position-relative">
+                    <button class="btn btn-link text-white" id="userMenuButton">
+                        <img src="@Url.Action("GetLogo", "Cliente")" alt="Logotipo" class="img-fluid rounded-circle" style="width: 30px; height: 30px;" />
+                    </button>
+                    <!-- Menu suspenso -->
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="@Url.Action("ClienteIndex", "Cliente")">Perfil</a>
+                        <a href="@Url.Action("Logout", "Login")">Sair</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            <div class="main-content">
+                @RenderBody() <!-- Este é o conteúdo principal da página -->
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            &copy; 2025 - ControleCadastro - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Toast Notification (aparece no canto inferior direito) -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+            <div class="toast-header">
+                <strong class="me-auto">Mensagem</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        function showToast(message, isSuccess) {
+            var toastMessage = document.getElementById("toastMessage");
+
+            var decodedMessage = decodeHtml(message);
+
+            toastMessage.textContent = decodedMessage;
+
+            var toast = document.getElementById('toastNotification');
+            if (isSuccess) {
+                toast.classList.remove("bg-danger");
+                toast.classList.add("bg-success"); // Cor verde para sucesso
+            } else {
+                toast.classList.remove("bg-success");
+                toast.classList.add("bg-danger"); // Cor vermelha para erro
+            }
+
+            var bootstrapToast = new bootstrap.Toast(toast);
+            bootstrapToast.show(); // Exibe o toast
+        }
+
+        function decodeHtml(html) {
+            var txt = document.createElement('textarea');
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        // Verifica se existe uma mensagem de sucesso ou erro e exibe a mensagem
+        @if (TempData["Message"] != null)
+        {
+            <text>
+                            var isSuccess = '@TempData["Codigo"]' == '200'; // Checa se o código é 200 (sucesso)
+                            showToast('@TempData["Message"]', isSuccess);
+            </text>
+        }
+    </script>
+
+</body>
+
+</html>
