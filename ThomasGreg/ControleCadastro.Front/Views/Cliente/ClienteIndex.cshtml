@@ -18,14 +18,12 @@
     <div class="main-content w-100">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <!-- Exibindo a imagem do cliente -->
                 <div class="row mb-4">
                     <div class="col-md-12 text-center">
                         <h3>Imagem de Perfil</h3>
                         <div class="text-center">
                             @if (Model.Logotipo != null && Model.Logotipo.Length > 0)
                             {
-                                // Convertendo o array de bytes em Base64 para exibição da imagem
                                 var base64String = Convert.ToBase64String(Model.Logotipo);
                                 var imageUrl = "data:image/jpeg;base64," + base64String;
 

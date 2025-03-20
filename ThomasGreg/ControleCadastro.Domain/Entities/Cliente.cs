@@ -50,48 +50,38 @@ namespace ControleCadastro.Domain.Entities
             set => SenhaHash = GerarSenhaHash(value);
         }
 
-        // Método para gerar o hash da senha usando Argon2
         private string GerarSenhaHash(string senha)
         {
-            // Gerar um salt aleatório
             var salt = GerarSalt();
 
             // Configurações do Argon2
             using (var hasher = new Argon2id(Encoding.UTF8.GetBytes(senha)))
             {
-                // Configurações do Argon2
-                hasher.Salt = salt; // Definindo o salt
-                hasher.DegreeOfParallelism = 8; // A quantidade de threads
-                hasher.MemorySize = 1024 * 64; // 64MB de memória
-                hasher.Iterations = 4; // Número de iterações
+                hasher.Salt = salt;
+                hasher.DegreeOfParallelism = 8;
+                hasher.MemorySize = 1024 * 64;
+                hasher.Iterations = 4;
 
-                // Gerar o hash
-                var hash = hasher.GetBytes(32);  // 32 bytes é o tamanho do hash gerado
-
+                var hash = hasher.GetBytes(32); 
                 // Combina o salt com o hash gerado
                 var resultado = new byte[salt.Length + hash.Length];
                 Buffer.BlockCopy(salt, 0, resultado, 0, salt.Length);
                 Buffer.BlockCopy(hash, 0, resultado, salt.Length, hash.Length);
 
-                return Convert.ToBase64String(resultado); // Converte para string Base64
+                return Convert.ToBase64String(resultado);
             }
         }
 
-        // Método para validar a senha informada
         public bool ValidarSenha(string senhaInformada)
         {
-            // Decodifica o hash armazenado
             var hashComSalt = Convert.FromBase64String(SenhaHash);
 
-            // O salt está no início do hash
-            var salt = new byte[16]; // Salt de 16 bytes
+            var salt = new byte[16];
             Buffer.BlockCopy(hashComSalt, 0, salt, 0, salt.Length);
 
-            // O restante é o hash
             var hashArmazenado = new byte[hashComSalt.Length - salt.Length];
             Buffer.BlockCopy(hashComSalt, salt.Length, hashArmazenado, 0, hashArmazenado.Length);
 
-            // Recalcula o hash da senha informada usando o mesmo salt
             using (var hasher = new Argon2id(Encoding.UTF8.GetBytes(senhaInformada)))
             {
                 hasher.Salt = salt;
@@ -101,22 +91,20 @@ namespace ControleCadastro.Domain.Entities
 
                 var hashInformado = hasher.GetBytes(32);
 
-                // Compara o hash informado com o armazenado
                 for (int i = 0; i < hashArmazenado.Length; i++)
                 {
                     if (hashArmazenado[i] != hashInformado[i])
                     {
-                        return false; // Senha incorreta
+                        return false;
                     }
                 }
-                return true; // Senha correta
+                return true;
             }
         }
 
-        // Método para gerar salt aleatório
         private static byte[] GerarSalt()
         {
-            var salt = new byte[16]; // 16 bytes de salt
+            var salt = new byte[16];
             using (var rng = new System.Security.Cryptography.RNGCryptoServiceProvider())
             {
                 rng.GetBytes(salt);

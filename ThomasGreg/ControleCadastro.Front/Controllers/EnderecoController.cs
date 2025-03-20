@@ -15,18 +15,15 @@
 
         public EnderecoController(HttpClient httpClient, IConfiguration configuration)
         {
-            // Criando um handler customizado para permitir certificados auto-assinados
             var handler = new HttpClientHandler()
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
             };
 
-            // Inicializando o HttpClient com o handler customizado
             _httpClient = new HttpClient(handler);
-            _linkApi = configuration["LinkApi"]; // Garantir que o LinkApi esteja configurado no appsettings.json
+            _linkApi = configuration["LinkApi"];
         }
 
-        // Exibe todos os endereços do usuário
         public async Task<IActionResult> Index()
         {
             try
@@ -105,7 +102,7 @@
                     {
                         TempData["Message"] = apiResponse.Mensagem;
                         TempData["Codigo"] = apiResponse.Codigo;
-                        return RedirectToAction("Index"); // Redirect after success
+                        return RedirectToAction("Index"); 
                     }
                     else
                     {
@@ -127,7 +124,7 @@
             }
 
         }
-        // Ação de Editar (GET)
+        
         public async Task<IActionResult> Edit(int id)
         {
             try
@@ -165,13 +162,12 @@
             }
             catch (Exception ex)
             {
-                // Em caso de exceção inesperada
+                
                 ViewBag.ErrorMessage = "Ocorreu um erro inesperado. Tente novamente mais tarde.";
                 return View(new Endereco());
             }
         }
 
-        // Ação POST para salvar o endereço editado
         [HttpPost]
         public async Task<IActionResult> Edit(Endereco endereco, string action)
         {
@@ -199,7 +195,7 @@
                     {
                         TempData["Message"] = apiResponse.Mensagem;
                         TempData["Codigo"] = apiResponse.Codigo;
-                        return RedirectToAction("Index"); // Redirect after success
+                        return RedirectToAction("Index");
                     }
                     else
                     {
@@ -245,13 +241,13 @@
                     {
                         TempData["Message"] = apiResponse.Mensagem;
                         TempData["Codigo"] = apiResponse.Codigo;
-                        return RedirectToAction("Index"); // Redirect after success
+                        return RedirectToAction("Index");
                     }
                     else
                     {
                         TempData["Message"] = apiResponse.Mensagem;
                         TempData["Codigo"] = apiResponse.Codigo;
-                        return RedirectToAction("Index"); // Redirect after success
+                        return RedirectToAction("Index"); 
                     }
                 }
 
@@ -263,7 +259,7 @@
             {
                 TempData["Message"] = ex.Message;
                 TempData["Codigo"] = 500;
-                return RedirectToAction("Index"); // Redirect after success
+                return RedirectToAction("Index"); 
             }
             
         }
